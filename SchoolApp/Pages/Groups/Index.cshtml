@@ -1,0 +1,70 @@
+@page
+@model SchoolApp.Pages.Groups.IndexModel
+
+@{
+    ViewData["Title"] = "Classes";
+}
+
+<h1>Classes</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Group[0].Day)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Group[0].Time)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.GroupData.Groups)
+        {
+            string selectedRow = "";
+            if (item.GroupID == Model.GroupID)
+            {
+                selectedRow = "table-success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Day)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Time)
+                </td>
+                <td>
+                    <a asp-page="./Index" asp-route-id="@item.GroupID">Select</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.GroupID">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.GroupID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a asp-page="Create">Add class</a>
+</p>
+
+@if (Model.GroupData.Students != null)
+{
+    <h3>Students</h3>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GroupData.Students.ElementAt(0).FullName)
+            </th>
+        </tr>
+        @foreach (var item in Model.GroupData.Students)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+            </tr>
+        }
+
+    </table>
+}

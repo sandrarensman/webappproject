@@ -1,0 +1,49 @@
+@page "{id:int}"
+@model SchoolApp.Pages.Groups.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Class</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Group.GroupID" />
+            <div class="form-group">
+                <label asp-for="Group.Day" class="control-label"></label>
+                <input asp-for="Group.Day" class="form-control" />
+                <span asp-validation-for="Group.Day" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Group.StartTime" class="control-label"></label>
+                <input asp-for="Group.StartTime" class="form-control" />
+                <span asp-validation-for="Group.StartTime" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Group.EndTime" class="control-label"></label>
+                <input asp-for="Group.EndTime" class="form-control" />
+                <span asp-validation-for="Group.EndTime" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<br />
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SchoolApp", "SchoolApp\SchoolApp.csproj", "{BC28961A-F715-4BE2-B42F-0EBCF62573FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC28961A-F715-4BE2-B42F-0EBCF62573FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC28961A-F715-4BE2-B42F-0EBCF62573FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC28961A-F715-4BE2-B42F-0EBCF62573FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC28961A-F715-4BE2-B42F-0EBCF62573FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0740BDD-4963-40F5-ADE3-1A3464612EFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0740BDD-4963-40F5-ADE3-1A3464612EFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0740BDD-4963-40F5-ADE3-1A3464612EFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0740BDD-4963-40F5-ADE3-1A3464612EFF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0DB1B716-5670-4F56-998A-92BAA606BB08}
+	EndGlobalSection
+EndGlobal

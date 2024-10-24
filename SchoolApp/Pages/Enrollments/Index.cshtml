@@ -1,0 +1,101 @@
+﻿@page
+@model SchoolApp.Pages.Enrollments.IndexModel
+
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<h1>@Configuration.GetSection("SiteData")["Enrollments"]</h1>
+
+<p>
+    <a asp-page="Create">New enrollment</a>
+</p>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Naam:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Show all</a>
+        </p>
+    </div>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.StudentSort" asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Enrollments[0].Student.FullName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.DateSort" asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Enrollments[0].StartDate)
+                </a>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollments[0].EndDate)
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortOrder="@Model.TypeSort" asp-route-currentFilter="@Model.CurrentFilter">
+                    @Html.DisplayNameFor(model => model.Enrollments[0].EnrollmentType)
+                </a>
+            </th>
+            <th class="text-end">
+                <a asp-page="./Index" asp-route-pageSize="10">10</a> |
+                <a asp-page="./Index" asp-route-pageSize="15">15</a> |
+                <a asp-page="./Index" asp-route-pageSize="20">20</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Enrollments) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.FullName)
+                </td>
+            
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @(item.EndDate == DateTime.MinValue ? "" : Html.DisplayFor(modelItem => item.EndDate))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EnrollmentType)
+                </td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.EnrollmentID">Details</a> |
+                    <a asp-page="./Edit" asp-route-id="@item.EnrollmentID">Edit</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.EnrollmentID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Enrollments.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Enrollments.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Enrollments.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Enrollments.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
