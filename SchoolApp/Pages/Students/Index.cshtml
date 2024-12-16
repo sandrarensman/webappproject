@@ -1,0 +1,99 @@
+﻿@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<h1>Students</h1>
+
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Name:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter"/>
+            <input type="submit" value="Search" class="btn btn-primary"/>
+            <a asp-page="./Index" class="btn btn-custom">Show all</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th class="@(Model.CurrentSort is "first_name" or "first_name_desc" or "default" ? "sorted" : "")">
+            <a asp-page="./Index"
+               asp-route-sortOrder="@Model.FirstNameSort"
+               asp-route-currentFilter="@Model.CurrentFilter">
+                @Html.DisplayNameFor(model => model.Students.Items[0].FirstName)
+            </a>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.Items[0].Prefix)
+        </th>
+        <th class="@(Model.CurrentSort is "last_name" or "last_name_desc" ? "sorted" : "")">
+            <a asp-page="./Index"
+               asp-route-sortOrder="@Model.LastNameSort"
+               asp-route-currentFilter="@Model.CurrentFilter">
+                @Html.DisplayNameFor(model => model.Students.Items[0].LastName)
+            </a>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.Items[0].PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Students.Items[0].EmailAddress)
+        </th>
+        <th class="text-end">
+            @Html.Raw(Model.PageSizeDropdownHtml)
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Students.Items)
+    {
+        <tr>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.FirstName)</a>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.Prefix)</a>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.LastName)</a>
+            </td>
+            <td>
+                <a asp-page="./Details"
+                   asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.PhoneNumber)</a>
+            </td>
+            <td>
+                <a asp-page="./Details"
+                   asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.EmailAddress)</a>
+            </td>
+            <td style="text-align: right;">
+                <a asp-page="./Delete" asp-route-id="@item.StudentId" class="delete-link" title="Delete">✖</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-custom @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-custom @nextDisabled">
+    Next
+</a>

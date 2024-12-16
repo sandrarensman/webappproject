@@ -1,0 +1,150 @@
+[
+  {
+    "StartDate": "2022-09-05",
+    "StudentId": 1,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2022-09-12",
+    "EndDate": "2022-11-30",
+    "StudentId": 1,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2022-12-01",
+    "StudentId": 1,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2022-09-07",
+    "StudentId": 2,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2022-09-14",
+    "EndDate": "2022-11-30",
+    "StudentId": 2,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2022-12-01",
+    "StudentId": 2,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2022-09-07",
+    "StudentId": 3,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2022-09-14",
+    "EndDate": "2022-11-30",
+    "StudentId": 3,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2022-12-01",
+    "StudentId": 3,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2023-09-04",
+    "StudentId": 4,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2023-09-11",
+    "EndDate": "2023-11-30",
+    "StudentId": 4,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2023-12-01",
+    "StudentId": 4,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2023-09-04",
+    "StudentId": 5,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2023-09-11",
+    "EndDate": "2023-11-30",
+    "StudentId": 5,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2023-12-01",
+    "StudentId": 5,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2023-09-06",
+    "StudentId": 6,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2023-09-13",
+    "EndDate": "2023-11-30",
+    "StudentId": 6,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2023-12-01",
+    "StudentId": 6,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2024-01-15",
+    "StudentId": 7,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2024-01-22",
+    "EndDate": "2024-04-14",
+    "StudentId": 7,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2024-04-15",
+    "StudentId": 7,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2024-01-15",
+    "StudentId": 8,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2024-01-22",
+    "EndDate": "2024-04-14",
+    "StudentId": 8,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2024-04-15",
+    "StudentId": 8,
+    "EnrollmentType": "Advanced"
+  },
+  {
+    "StartDate": "2024-09-04",
+    "StudentId": 9,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2024-09-11",
+    "StudentId": 9,
+    "EnrollmentType": "Beginner"
+  },
+  {
+    "StartDate": "2024-09-04",
+    "StudentId": 10,
+    "EnrollmentType": "Trial"
+  },
+  {
+    "StartDate": "2024-09-11",
+    "StudentId": 10,
+    "EnrollmentType": "Beginner"
+  }
+]

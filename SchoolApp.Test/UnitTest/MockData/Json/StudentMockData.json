@@ -1,0 +1,79 @@
+[
+  {
+    "StudentId": 1,
+    "FirstName": "Hendrik",
+    "LastName": "Andriessen",
+    "PhoneNumber": "023 1234567",
+    "EmailAddress": "hendrik.andriessen@example.com",
+    "Motivation": "Ik heb jarenlang Tai Chi gedaan. Ik wil het graag weer oppakken."
+  },
+  {
+    "StudentId": 2,
+    "FirstName": "Caecilia",
+    "LastName": "Andriessen",
+    "PhoneNumber": "023 2345678",
+    "EmailAddress": "caecilia.andriessen@example.com"
+  },
+  {
+    "StudentId": 3,
+    "FirstName": "Willem Frederik",
+    "LastName": "Bon",
+    "PhoneNumber": "033 1234567",
+    "EmailAddress": "willemfrederik.bon@example.com",
+    "Motivation": "Geen ervaring, wel interesse"
+  },
+  {
+    "StudentId": 4,
+    "FirstName": "Anna",
+    "LastName": "Lambrechts-Vos",
+    "PhoneNumber": "010 1234567",
+    "EmailAddress": "anna.lambrechtsvos@example.com",
+    "Motivation": "Ik werd nieuwsgierig toen ik mensen in het park Tai Chi zag doen."
+  },
+  {
+    "StudentId": 5,
+    "FirstName": "Matthijs",
+    "LastName": "Vermeulen",
+    "PhoneNumber": "0492 234567",
+    "EmailAddress": "matthijs.vermeulen@example.com",
+    "Motivation": "Ik heb altijd veel gesport en wil graag in beweging blijven."
+  },
+  {
+    "StudentId": 6,
+    "FirstName": "Theo",
+    "LastName": "Verbey",
+    "PhoneNumber": "020 3456789",
+    "EmailAddress": "theo.verbey@example.com"
+  },
+  {
+    "StudentId": 7,
+    "FirstName": "Tera",
+    "Prefix": "de",
+    "LastName": "Marez Oyens",
+    "PhoneNumber": "0255 123456",
+    "EmailAddress": "tera.demarezoyens@example.com"
+  },
+  {
+    "StudentId": 8,
+    "FirstName": "Johannes",
+    "LastName": "Verhulst",
+    "PhoneNumber": "070 1234567",
+    "EmailAddress": "johannes.verhulst@example.com"
+  },
+  {
+    "StudentId": 9,
+    "FirstName": "Julius",
+    "LastName": "Röntgen",
+    "PhoneNumber": "030 1234567",
+    "EmailAddress": "julius.rontgen@example.com",
+    "Motivation": "Ik ben op zoek naar meer ontspanning."
+  },
+  {
+    "StudentId": 10,
+    "FirstName": "Ton",
+    "Prefix": "de",
+    "LastName": "Leeuw",
+    "PhoneNumber": "010 2345678",
+    "EmailAddress": "ton.deleeuw@example.com"
+  }
+]

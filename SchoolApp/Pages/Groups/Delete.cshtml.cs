@@ -1,58 +1,39 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.Data;
 using SchoolApp.Models;
 
-namespace SchoolApp.Pages.Groups
+namespace SchoolApp.Pages.Groups;
+
+public class DeleteModel(DefaultContext context) : PageModel
 {
-    public class DeleteModel(SchoolApp.Data.SchoolContext context) : PageModel
+    [BindProperty] public Group Group { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
-        private readonly SchoolApp.Data.SchoolContext _context = context;
+        if (id == null || context.Groups == null) return NotFound();
 
-        [BindProperty]
-      public Group Group { get; set; }
+        var group = await context.Groups.FirstOrDefaultAsync(m => m.GroupId == id);
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        if (group == null) return NotFound();
+
+        Group = group;
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync(int? id)
+    {
+        if (id == null || context.Groups == null) return NotFound();
+        var group = await context.Groups.FindAsync(id);
+
+        if (group != null)
         {
-            if (id == null || _context.Groups == null)
-            {
-                return NotFound();
-            }
-
-            var group = await _context.Groups.FirstOrDefaultAsync(m => m.GroupID == id);
-
-            if (group == null)
-            {
-                return NotFound();
-            }
-            else 
-            {
-                Group = group;
-            }
-            return Page();
+            Group = group;
+            context.Groups.Remove(Group);
+            await context.SaveChangesAsync();
         }
 
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null || _context.Groups == null)
-            {
-                return NotFound();
-            }
-            var group = await _context.Groups.FindAsync(id);
-
-            if (group != null)
-            {
-                Group = group;
-                _context.Groups.Remove(Group);
-                await _context.SaveChangesAsync();
-            }
-
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

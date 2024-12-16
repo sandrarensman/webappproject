@@ -1,5 +1,6 @@
 @page "{id:int}"
-@model SchoolApp.Pages.Groups.DeleteModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -7,9 +8,9 @@
 
 <h2>Delete</h2>
 
-<h4>The following class will be deleted:</h4>
+<h4>The following group will be deleted:</h4>
 <div>
-    <hr />
+    <hr/>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Group.Day)
@@ -30,10 +31,13 @@
             @Html.DisplayFor(model => model.Group.EndTime)
         </dd>
     </dl>
-    
+
     <form method="post">
-        <input type="hidden" asp-for="Group.GroupID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="hidden" asp-for="Group.GroupId"/>
+        <input type="submit" value="Delete" class="btn btn-danger"/>
+        <a asp-page="./Details" asp-route-id="@Model.Group.GroupId" class="btn btn-cancel">Cancel</a>
     </form>
+</div>
+<div>
+    <a asp-page="./Index" class="btn btn-custom">Back to list</a>
 </div>

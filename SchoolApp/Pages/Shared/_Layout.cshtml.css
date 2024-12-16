@@ -1,55 +1,63 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
+﻿/* Navigation bar */
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
 }
 
-a {
-  color: #0077cc;
+.navbar-nav .nav-item .dropdown-menu {
+    background-color: #ffffff;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar-nav .nav-item .dropdown-menu .dropdown-item:hover {
+    color: #000000;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.navbar-brand {
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
 }
 
+.navbar-brand:hover {
+    color: #000000;
+    border-radius: 4px;
+}
+
+/* Navigation items */
+.nav-item {
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+}
+
+.nav-item:hover {
+    color: #000000;
+    border-radius: 4px;
+}
+
+/* Navigation bar links */
+.nav-link {
+    color: #212529 !important
+}
+
+/* Borders */
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
+/* Shadows */
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
+/* Footer */
 .footer {
-  position: absolute !important;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
-}
-
-.table-borderless th,
-.table-borderless td,
-.table-borderless thead th,
-.table-borderless tbody + tbody {
-    border: 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }

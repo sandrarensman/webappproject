@@ -1,52 +1,50 @@
 @page
-@model SchoolApp.Pages.Groups.IndexModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexModel
 
 @{
     ViewData["Title"] = "Classes";
 }
 
-<h1>Classes</h1>
+<h1>Groups</h1>
 
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Group[0].Day)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Group[0].Time)
-            </th>
-            <th></th>
-        </tr>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Group[0].Day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group[0].Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group[0].Level)
+        </th>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.GroupData.Groups)
+    @foreach (var item in Model.GroupData.Groups)
+    {
+        var selectedRow = "";
+        if (item.GroupId == Model.GroupId)
         {
-            string selectedRow = "";
-            if (item.GroupID == Model.GroupID)
-            {
-                selectedRow = "table-success";
-            }
-            <tr class="@selectedRow">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Day)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Time)
-                </td>
-                <td>
-                    <a asp-page="./Index" asp-route-id="@item.GroupID">Select</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.GroupID">Edit</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.GroupID">Delete</a>
-                </td>
-            </tr>
+            selectedRow = "table-success";
         }
+
+        <tr class="@selectedRow">
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Day)</a>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Time)</a>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Level)</a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
-
-<p>
-    <a asp-page="Create">Add class</a>
-</p>
 
 @if (Model.GroupData.Students != null)
 {

@@ -1,38 +1,37 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using SchoolApp.Helpers;
 
-namespace SchoolApp.Models
+namespace SchoolApp.Models;
+
+public enum EnrollmentType
 {
-    public enum EnrollmentType
-    {
-        [Display(Name = "Trial")]
-        trial,
+    [Display(Name = "Trial")] Trial,
 
-        [Display(Name = "Beginner")]
-        beginner,
+    [Display(Name = "Beginner")] Beginner,
 
-        [Display(Name = "Advanced")]
-        advanced
-    }
+    [Display(Name = "Advanced")] Advanced
+}
 
-    public class Enrollment
-    {
-        public int EnrollmentID { get; set; }
+public class Enrollment
+{
+    public int EnrollmentId { get; init; }
 
-        [Display(Name = "Type")]
-        public EnrollmentType EnrollmentType { get; set; }
+    [Display(Name = "Type")]
+    [JsonConverter(typeof(EnumConverter<EnrollmentType>))]
+    public EnrollmentType EnrollmentType { get; init; }
 
-        [Display(Name = "Date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
-        public DateTime StartDate { get; set; }
+    [Display(Name = "Start date")]
+    [DataType(DataType.Date)]
+    [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+    public DateTime StartDate { get; init; }
 
-        [Display(Name = "End date")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
-        [DataType(DataType.Date)]
-        public DateTime? EndDate { get; set; }
+    [Display(Name = "End date")]
+    [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
+    [DataType(DataType.Date)]
+    public DateTime? EndDate { get; init; }
 
-        public int StudentID { get; set; }
+    public int StudentId { get; init; }
 
-        public Student Student { get; set; }
-    }
+    public Student Student { get; init; }
 }

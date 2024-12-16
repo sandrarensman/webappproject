@@ -1,60 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using SchoolApp.Data;
+using SchoolApp.Helpers;
 using SchoolApp.Models;
 
-namespace SchoolApp.Pages.Enrollments
+namespace SchoolApp.Pages.Enrollments;
+
+public class CreateModel(DefaultContext context) : StudentNamePageModel
 {
-    public class CreateModel(SchoolContext context) : StudentNamePageModel
+    [BindProperty] public Enrollment Enrollment { get; set; }
+
+    [BindProperty] public int? StudentId { get; set; }
+
+    public IActionResult OnGet(int? id)
     {
-        private readonly SchoolContext _context = context;
+        if (id != null) StudentId = id;
+        PopulateStudentsDropDownList(context, id);
+        return Page();
+    }
 
-        [BindProperty]
-        public Enrollment Enrollment { get; set; }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var emptyEnrollment = new Enrollment();
 
-        [BindProperty]
-        public int? StudentID { get; set; }
-
-        public IActionResult OnGet(int? id)
+        if (await TryUpdateModelAsync(
+                emptyEnrollment,
+                "enrollment",
+                e => e.EnrollmentId, e => e.EnrollmentType, e => e.StartDate, e => e.EndDate, e => e.StudentId))
         {
-            if (id != null)
-            {
-                StudentID = id;
-            }
-            PopulateStudentsDropDownList(_context, id);
-            return Page();
+            context.Enrollments.Add(emptyEnrollment);
+            await context.SaveChangesAsync();
+
+            if (StudentId.HasValue) return RedirectToPage("/Details", new { id = StudentId });
+
+            return RedirectToPage("./Index");
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            var emptyEnrollment = new Enrollment();
-
-            if (await TryUpdateModelAsync(
-                 emptyEnrollment,
-                 "enrollment",   // Prefix for form value.
-                 e => e.EnrollmentID, e => e.EnrollmentType, e => e.StartDate, e => e.EndDate, e => e.StudentID))
-            {
-                _context.Enrollments.Add(emptyEnrollment);
-                await _context.SaveChangesAsync();
-
-                if (StudentID.HasValue)
-                {
-                    return RedirectToPage("/Details", new { id = StudentID });
-                }
-                else
-                {
-                    return RedirectToPage("./Index");
-                }
-            }
-
-            // Select StudentID if TryUpdateModelAsync fails.
-            PopulateStudentsDropDownList(_context, emptyEnrollment.StudentID);
-            return Page();
-        }
+        PopulateStudentsDropDownList(context, emptyEnrollment.StudentId);
+        return Page();
     }
 }

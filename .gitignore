@@ -3,7 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
-*.db
+# Exclude database files and IDE config files
+*.db*
+*.idea*
+*.vs*
 
 # User-specific files
 *.rsuser

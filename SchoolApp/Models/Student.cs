@@ -1,44 +1,42 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace SchoolApp.Models
+namespace SchoolApp.Models;
+
+public class Student
 {
-    public class Student
-    {
-        public int StudentID { get; set; }
+    public int StudentId { get; init; }
 
-        [Display(Name = "First name")]
-        [Required]
-        public string FirstName { get; set; }
+    [Display(Name = "First name")]
+    [MaxLength(100)]
+    [Required]
+    public string FirstName { get; init; }
 
-        [Display(Name = "Prefix")]
-        public string Prefix { get; set; }
+    [Display(Name = "Prefix")]
+    [MaxLength(10)]
+    public string Prefix { get; init; }
 
-        [Display(Name = "Last name")]
-        [Required]
-        public string LastName { get; set; }
+    [Display(Name = "Last name")]
+    [MaxLength(100)]
+    [Required]
+    public string LastName { get; init; }
 
-        [Display(Name = "Phone number")]
-        public string PhoneNumber { get; set; }
+    [Display(Name = "Phone number")]
+    [MaxLength(20)]
+    public string PhoneNumber { get; init; }
 
-        [Display(Name = "Email")]
-        public string EmailAddress { get; set; }
+    [Display(Name = "Email")]
+    [MaxLength(100)]
+    public string EmailAddress { get; init; }
 
-        [Display(Name = "Motivation")]
-        public string Motivation { get; set; }
+    [Display(Name = "Motivation")]
+    [MaxLength(400)]
+    public string Motivation { get; init; }
 
-        [Display(Name = "Name")]
-        public string FullName
-        {
-            get
-            {
-                return string.Join(" ", new string[] { FirstName, Prefix, LastName }.Where(s => !string.IsNullOrEmpty(s)));
-            }
-        }
+    [Display(Name = "Name")]
+    public string FullName =>
+        string.Join(" ", new[] { FirstName, Prefix, LastName }.Where(s => !string.IsNullOrEmpty(s)));
 
-        [Display(Name = "Classes")]
-        public ICollection<Group> Groups { get; set; }
+    [Display(Name = "Groups")] public ICollection<Group> Groups { get; set; }
 
-        [Display(Name = "Enrollments")]
-        public ICollection<Enrollment> Enrollments { get; set; }
-    }
+    [Display(Name = "Enrollments")] public ICollection<Enrollment> Enrollments { get; init; }
 }

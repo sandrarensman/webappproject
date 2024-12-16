@@ -1,0 +1,88 @@
+trigger: none
+
+pool:
+  vmImage: windows-latest
+
+variables:
+- name: BuildPlatform
+  value:  'x64'
+- name: BuildConfiguration
+  value: 'release'
+- name: AzureSubscription
+  value: 'srhudebnice'
+- name: ProjectName
+  value: 'SchoolApp'
+
+stages:
+  - stage:
+    jobs:
+      - job: test
+        displayName: Run unit tests
+        steps:
+        - task: UseDotNet@2
+          displayName: Use .NET 8
+          inputs: 
+            packageType: sdk
+            version: 8.0.x
+            includePreviewVersions: true
+            performMultiLevelLookup: true
+        - task: DotNetCoreCLI@2
+          displayName: dotnet restore
+          inputs:
+            command: restore
+            projects: '**/*.csproj'
+            includeNuGetOrg: true
+        - task: DotNetCoreCLI@2
+          displayName: dotnet build
+          inputs:
+            command: build
+            publishWebProjects: false
+            projects: '**/*.csproj'
+            arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        - task: VSTest@3
+          displayName: Run tests
+          inputs:
+            testAssemblyVer2: |
+              $(Build.ArtifactStagingDirectory)\*UnitTest.dll
+              !**\obj\**
+            codeCoverageEnabled: true
+            platform: '$(BuildPlatform)'
+            configuration: '$(BuildConfiguration)'
+        - task: PublishTestResults@2
+          displayName: Publish test results
+          inputs:
+            testResultsFormat: XUnit
+            testResultsFiles: '*.trx'
+            searchFolder: '$(Agent.TempDirectory)\TestResults'
+
+      - job: deploy
+        displayName: Deploy web app
+        dependsOn: test
+        steps:
+          - task: UseDotNet@2
+            displayName: Use .NET 8
+            inputs: 
+              packageType: sdk
+              version: 8.0.x
+              includePreviewVersions: true
+              performMultiLevelLookup: true
+          - task: DotNetCoreCLI@2
+            displayName: dotnet restore
+            inputs:
+              command: restore
+              projects: '**/*.csproj'
+              includeNuGetOrg: true
+          - task: DotNetCoreCLI@2
+            displayName: dotnet publish
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: '**/$(ProjectName).csproj'
+              arguments: '--configuration release --output $(System.ArtifactsDirectory)'
+          - task: AzureWebApp@1
+            displayName: Deploy web app
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webApp
+              appName: srh-webapp-project
+              package: $(System.ArtifactsDirectory)/$(ProjectName).zip

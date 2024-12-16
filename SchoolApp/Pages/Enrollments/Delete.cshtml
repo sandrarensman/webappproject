@@ -1,5 +1,6 @@
 ﻿@page "{id:int}"
-@model SchoolApp.Pages.Enrollments.DeleteModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DeleteModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -10,7 +11,7 @@
 <h4>The following enrollment will be deleted:</h4>
 <div>
     <h4>Enrollment</h4>
-    <hr />
+    <hr/>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Enrollment.Student.FullName)
@@ -37,10 +38,13 @@
             @Html.DisplayFor(model => model.Enrollment.EndDate)
         </dd>
     </dl>
-    
+
     <form method="post">
-        <input type="hidden" asp-for="Enrollment.EnrollmentID" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="hidden" asp-for="Enrollment.EnrollmentId"/>
+        <input type="submit" value="Delete" class="btn btn-danger"/>
+        <a asp-page="./Details" asp-route-id="@Model.Enrollment.EnrollmentId" class="btn btn-cancel">Cancel</a>
     </form>
+</div>
+<div>
+    <a asp-page="./Index" class="btn btn-custom">Back to list</a>
 </div>

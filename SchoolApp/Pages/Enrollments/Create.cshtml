@@ -1,15 +1,14 @@
 ﻿@page
-@model SchoolApp.Pages.Enrollments.CreateModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using SchoolApp.Models
+@model CreateModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Enrollment</h4>
-<hr />
+<h1>New Enrollment</h1>
+<hr/>
 <div class="row">
     <div class="col-md-4">
         <form method="post">
@@ -20,43 +19,39 @@
                         asp-items="Html.GetEnumSelectList<EnrollmentType>()">
                     <option value="">-- Select Enrollment Type --</option>
                 </select>
-                <span asp-validation-for="Enrollment.EnrollmentType" class="text-danger" />
+                <span asp-validation-for="Enrollment.EnrollmentType" class="text-danger"></span>
             </div>
             <br>
             <div class="form-group">
                 <label asp-for="Enrollment.StartDate" class="control-label"></label>
-                <input asp-for="Enrollment.StartDate" class="form-control" />
+                <input asp-for="Enrollment.StartDate" class="form-control"/>
                 <span asp-validation-for="Enrollment.StartDate" class="text-danger"></span>
             </div>
             <br>
             <div class="form-group">
                 <label asp-for="Enrollment.EndDate" class="control-label"></label>
-                <input asp-for="Enrollment.EndDate" class="form-control" />
+                <input asp-for="Enrollment.EndDate" class="form-control"/>
                 <span asp-validation-for="Enrollment.EndDate" class="text-danger"></span>
             </div>
             <br>
             <div class="form-group">
                 <label asp-for="Enrollment.Student" class="control-label"></label>
-                <select asp-for="Enrollment.StudentID" class="form-control"
-                        asp-items="@Model.StudentNameSL">
+                <select asp-for="Enrollment.StudentId" class="form-control"
+                        asp-items="@Model.StudentNameSelectList">
                     <option value="">-- Select Student --</option>
                 </select>
-                <span asp-validation-for="Enrollment.StudentID" class="text-danger" />
+                <span asp-validation-for="Enrollment.StudentId" class="text-danger"></span>
             </div>
-            <input type="hidden" value="@Model.StudentID" name="StudentID" />
+            <input type="hidden" value="@Model.StudentId" name="StudentID"/>
             <br>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary"/>
+                <a asp-page="Index" class="btn btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
 </div>
 
-<br>
-<div>
-    Terug naar <a asp-page="Index"> Inschrijvingen</a> | <a asp-page="/Index">Leerlingen</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

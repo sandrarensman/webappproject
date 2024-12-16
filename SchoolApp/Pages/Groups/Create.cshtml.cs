@@ -1,38 +1,26 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using SchoolApp.Data;
 using SchoolApp.Models;
 
-namespace SchoolApp.Pages.Groups
+namespace SchoolApp.Pages.Groups;
+
+public class CreateModel(DefaultContext context) : PageModel
 {
-    public class CreateModel(SchoolApp.Data.SchoolContext context) : PageModel
+    [BindProperty] public Group Group { get; set; }
+
+    public IActionResult OnGet()
     {
-        private readonly SchoolApp.Data.SchoolContext _context = context;
+        return Page();
+    }
 
-        public IActionResult OnGet()
-        {
-            return Page();
-        }
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if (!ModelState.IsValid) return Page();
 
-        [BindProperty]
-        public Group Group { get; set; }
-        
-        public async Task<IActionResult> OnPostAsync()
-        {
-          if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+        context.Groups.Add(Group);
+        await context.SaveChangesAsync();
 
-            _context.Groups.Add(Group);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
+        return RedirectToPage("./Index");
     }
 }

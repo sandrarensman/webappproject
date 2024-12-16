@@ -1,101 +1,31 @@
-﻿@page
-@model SchoolApp.Pages.Students.IndexModel
-
+@page
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IndexModel
 @{
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Welcome to SchoolApp";
 }
 
-<h1>Students</h1>
+<div class="text-center mt-5">
+    <h1>Welcome to SchoolApp</h1>
+    <p class="lead">Manage students, groups, and enrollments with ease.</p>
+</div>
 
-<p>
-    <a asp-page="Create">Create student</a>
-</p>
+<hr/>
 
-<form asp-page="./Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            Name:
-            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-            <input type="submit" value="Search" class="btn btn-primary" /> |
-            <a asp-page="./Index">Show all</a>
-        </p>
+<div class="row text-center">
+    <div class="col-md-4">
+        <h2>Students</h2>
+        <p>View and manage the student database.</p>
+        <a asp-page="/Students/Index" class="btn btn-custom">Go to Students</a>
     </div>
-</form>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.FirstNameSort" asp-route-currentFilter="@Model.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Students[0].FirstName)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students[0].Prefix)
-            </th>
-            <th>
-                <a asp-page="./Index" asp-route-sortOrder="@Model.LastNameSort" asp-route-currentFilter="@Model.CurrentFilter">
-                    @Html.DisplayNameFor(model => model.Students[0].LastName)
-                </a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students[0].PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Students[0].EmailAddress)
-            </th>
-            <th class="text-end">
-                <a asp-page="./Index" asp-route-pageSize="10">10</a> |
-                <a asp-page="./Index" asp-route-pageSize="15">15</a> |
-                <a asp-page="./Index" asp-route-pageSize="20">20</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Students)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Prefix)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EmailAddress)
-                </td>
-                <td>
-                    <a asp-page="./Details" asp-route-id="@item.StudentID">Details</a> |
-                    <a asp-page="./Edit" asp-route-id="@item.StudentID">Edit</a> |
-                    <a asp-page="./Delete" asp-route-id="@item.StudentID">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@{
-    var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
-}
-
-<a asp-page="./Index"
-    asp-route-sortOrder="@Model.CurrentSort"
-    asp-route-pageIndex="@(Model.Students.PageIndex - 1)"
-    asp-route-currentFilter="@Model.CurrentFilter"
-    class="btn btn-primary @prevDisabled">
-    Previous
-</a>
-<a asp-page="./Index"
-    asp-route-sortOrder="@Model.CurrentSort"
-    asp-route-pageIndex="@(Model.Students.PageIndex + 1)"
-    asp-route-currentFilter="@Model.CurrentFilter"
-    class="btn btn-primary @nextDisabled">
-    Next
-</a>
+    <div class="col-md-4">
+        <h2>Groups</h2>
+        <p>Organize students into groups.</p>
+        <a asp-page="/Groups/Index" class="btn btn-custom">Go to Groups</a>
+    </div>
+    <div class="col-md-4">
+        <h2>Enrollments</h2>
+        <p>Manage enrollment records and schedules.</p>
+        <a asp-page="/Enrollments/Index" class="btn btn-custom">Go to Enrollments</a>
+    </div>
+</div>

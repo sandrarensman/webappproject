@@ -1,41 +1,35 @@
-// TODO: delete?
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.Data;
 using SchoolApp.Models;
-using SchoolApp.Models.SchoolViewModels;
+using SchoolApp.ViewModels;
 
-namespace SchoolApp.Pages.Groups
+namespace SchoolApp.Pages.Groups;
+
+public class DetailsModel(DefaultContext context) : PageModel
 {
-    public class DetailsModel(SchoolContext context) : PageModel
+    private readonly DefaultContext _context = context;
+
+    public GroupIndexData GroupData { get; set; }
+
+    public Group Group { get; set; }
+
+    public async Task<IActionResult> OnGetAsync(int? id)
     {
-        private readonly SchoolContext _context = context;
+        if (id == null || _context.Groups == null) return NotFound();
 
-        public Group Group { get; set; }
+        var group = await _context.Groups
+            .Include(g => g.Students
+                .OrderBy(s => s.FirstName)
+                .ThenBy(s => s.LastName))
+            .ThenInclude(s => s.Enrollments
+                .OrderBy(e => e.StartDate))
+            .AsNoTracking()
+            .FirstOrDefaultAsync(m => m.GroupId == id);
+        if (group == null) return NotFound();
 
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null || _context.Groups == null)
-            {
-                return NotFound();
-            }
-
-            var group = await _context.Groups.FirstOrDefaultAsync(m => m.GroupID == id);
-            if (group == null)
-            {
-                return NotFound();
-            }
-            else 
-            {
-                Group = group;
-            }
-            return Page();
-        }
+        Group = group;
+        return Page();
     }
 }

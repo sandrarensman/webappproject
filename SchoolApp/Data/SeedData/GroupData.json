@@ -1,0 +1,98 @@
+[
+  {
+    "Day": "Maandag",
+    "StartTime": "18:00:00",
+    "EndTime": "19:15:00",
+    "Level": "Form",
+    "StudentIds": [
+      14,
+      15,
+      17,
+      18,
+      19,
+      20,
+      22,
+      23,
+      34
+    ]
+  },
+  {
+    "Day": "Maandag",
+    "StartTime": "19:20:00",
+    "EndTime": "20:45:00",
+    "Level": "Beginners",
+    "StudentIds": [
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30
+    ]
+  },
+  {
+    "Day": "Maandag",
+    "StartTime": "20:45:00",
+    "EndTime": "22:00:00",
+    "Level": "YinYang",
+    "StudentIds": [
+      3,
+      5,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      21
+    ]
+  },
+  {
+    "Day": "Woensdag",
+    "StartTime": "18:00:00",
+    "EndTime": "19:15:00",
+    "Level": "Beginners",
+    "StudentIds": [
+      31,
+      32,
+      33,
+      35,
+      36,
+      37,
+      38,
+      39
+    ]
+  },
+  {
+    "Day": "Woensdag",
+    "StartTime": "19:30:00",
+    "EndTime": "20:45:00",
+    "Level": "SwordForm",
+    "StudentIds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      10
+    ]
+  },
+  {
+    "Day": "Woensdag",
+    "StartTime": "20:45:00",
+    "EndTime": "22:00:00",
+    "Level": "Form",
+    "StudentIds": [
+      13,
+      14,
+      15,
+      16,
+      18,
+      22,
+      40
+    ]
+  }
+]

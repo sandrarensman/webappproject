@@ -1,5 +1,6 @@
 ﻿@page "{id:int}"
-@model SchoolApp.Pages.Enrollments.DetailsModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model DetailsModel
 
 @{
     ViewData["Title"] = "Details";
@@ -9,7 +10,7 @@
 
 <div>
     <h4>Enrollment</h4>
-    <hr />
+    <hr/>
     <dl class="row">
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Enrollment.Student.FullName)
@@ -37,7 +38,12 @@
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.Enrollment.EnrollmentID">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+<div class="button-container">
+    <div class="left-buttons">
+        <a asp-page="./Edit" asp-route-id="@Model.Enrollment.EnrollmentId" class="btn btn-custom">Edit</a>
+        <a asp-page="./Index" class="btn btn-cancel">Back</a>
+    </div>
+    <div class="right-buttons">
+        <a asp-page="./Delete" asp-route-id="@Model.Enrollment.EnrollmentId" class="btn btn-danger">Delete</a>
+    </div>
 </div>

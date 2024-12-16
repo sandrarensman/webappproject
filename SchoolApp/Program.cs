@@ -1,23 +1,68 @@
+using System.ComponentModel;
+using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using SchoolApp.Data;
+using SchoolApp.Helpers;
+using SchoolApp.Interfaces.Services;
+using SchoolApp.Models;
+using SchoolApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+var options = new JsonSerializerOptions
+{
+    Converters =
+    {
+        new EnumConverter<Level>(),
+        new EnumConverter<EnrollmentType>()
+    }
+};
 
-builder.Services.AddDbContext<SchoolContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("SchoolContextSQLite") ?? throw new InvalidOperationException("Connection string 'SchoolContextSQLite' not found.")));
+
+var environment = builder.Environment.EnvironmentName;
+builder.Configuration.AddEnvironmentVariables().AddJsonFile($"appsettings.{environment}.json");
+
+var databaseProvider = builder.Configuration["DatabaseProvider"];
+var connectionStrings = builder.Configuration.GetSection("ConnectionStrings");
+
+builder.Services.AddRazorPages(opt =>
+{
+    opt.Conventions.AddPageApplicationModelConvention("/Pages/YourPage", model =>
+    {
+        model.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+    });
+});
+builder.Services.AddScoped<EnrollmentService>();
+builder.Services.AddScoped<StudentService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddSingleton(options);
+builder.Services.AddSingleton<JsonDataLoader>();
+builder.Services.AddSingleton<DbInitializer>();
+
+builder.Services.AddDbContext<DefaultContext>(opt =>
+{
+    switch (databaseProvider)
+    {
+        case "SQLite":
+            opt.UseSqlite(connectionStrings["SQLite"]);
+            break;
+        case "AzureSQL":
+            opt.UseSqlServer(connectionStrings["AzureSQL"]);
+            break;
+        default:
+            throw new InvalidOperationException("Unsupported database provider configured.");
+    }
+});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 else
@@ -29,10 +74,19 @@ else
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<DefaultContext>();
+    var dbInitializer = services.GetRequiredService<DbInitializer>();
 
-    var context = services.GetRequiredService<SchoolContext>();
-    context.Database.EnsureCreated();
-    DbInitializer.Initialize(context);
+    switch (databaseProvider)
+    {
+        case "SQLite":
+            context.Database.EnsureCreated();
+            dbInitializer.Initialize(context);
+            break;
+        case "AzureSQL":
+            context.Database.Migrate();
+            break;
+    }
 }
 
 app.UseHttpsRedirection();
