@@ -6,18 +6,27 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] ->@Configuration.GetSection("SiteData")["Name"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/SchoolApp.styles.css" asp-append-version="true"/>
-
+    <title>@ViewData["Title"] -> @Configuration.GetSection("SiteData")["Name"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navigation.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/buttons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/links.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tables.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/typography.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/utilities.css" asp-append-version="true" />
 </head>
+
 <body>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
-            <a class="navbar-brand" asp-area="" asp-page="/Index"><img src="~/images/bluedragon.png"
-                                                                       alt="Blue Dragon">@Configuration.GetSection("SiteData")["Name"]
+            <a class="navbar-brand" asp-area="" asp-page="/Index">
+                <img class="navbar-image" src="~/images/bluedragon.png" alt="Blue Dragon">
+                @Configuration.GetSection("SiteData")["Name"]
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
                     aria-controls="navbarSupportedContent"
@@ -38,13 +47,14 @@
                         <a class="nav-link text-dark" asp-area=""
                            asp-page="/Enrollments/Index">@Configuration.GetSection("SiteData")["Enrollments"]</a>
                     </li>
+                    <li class="nav-item space-item"></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             New
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" asp-page="/Create">Student</a></li>
+                            <li><a class="dropdown-item" asp-page="/Students/Create">Student</a></li>
                             <li><a class="dropdown-item" asp-page="/Enrollments/Create">Enrollment</a></li>
                             <li><a class="dropdown-item" asp-page="/Groups/Create">Group</a></li>
                         </ul>

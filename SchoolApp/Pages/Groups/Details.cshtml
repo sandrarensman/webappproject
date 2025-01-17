@@ -68,7 +68,15 @@
                             @Html.DisplayFor(modelItem => item.EmailAddress)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Enrollments.ElementAt(0).StartDate)
+                            @if (item.Enrollments.Any())
+                            {
+                                var firstEnrollment = item.Enrollments.OrderBy(e => e.StartDate).FirstOrDefault();
+                                @Html.DisplayFor(modelItem => firstEnrollment.StartDate)
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
                         </td>
                     </tr>
                 }
@@ -79,9 +87,9 @@
 <div class="button-container">
     <div class="left-buttons">
         <a asp-page="./Edit" asp-route-id="@Model.Group?.GroupId" class="btn btn-custom">Edit</a>
-        <a asp-page="./Index" class="btn btn-cancel">Back</a>
+        <a asp-page="./Index" class="btn btn-custom-cancel">Back</a>
     </div>
     <div class="right-buttons">
-        <a asp-page="./Delete" asp-route-id="@Model.Group?.GroupId" class="btn btn-danger">Delete</a>
+        <a asp-page="./Delete" asp-route-id="@Model.Group?.GroupId" class="btn btn-custom-danger">Delete</a>
     </div>
 </div>

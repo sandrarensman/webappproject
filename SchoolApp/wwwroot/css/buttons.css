@@ -1,0 +1,75 @@
+/* Button container */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* General-purpose button */
+.btn-custom {
+    background-color: var(--primary-color);
+    color: var(--black-color);
+    border: none;
+    margin: 10px 0;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-custom:hover {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+}
+
+.btn-custom:focus {
+    box-shadow: 0 0 0 0.2rem #4CA1AF66;
+}
+
+/* Cancel button */
+.btn-custom-cancel {
+    background-color: #d6d6d6;
+    color: var(--black-color);
+    padding: 10px 20px;
+    border: none;
+    margin: 10px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btn-custom-cancel:hover {
+    background-color: #a1a1a1;
+    color: var(--white-color);
+}
+
+.btn-custom:focus {
+    box-shadow: 0 0 0 0.2rem #4CA1AF66;
+}
+
+/* Danger buttons */
+a.btn-custom-danger,
+.btn-custom-danger {
+    color: #ffffff;
+    background-color: #ac0101;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    margin: 10px 0;
+}
+
+a.btn-custom-danger:hover,
+.btn-custom-danger:hover {
+    background-color: #d30101;
+    color: #ffffff;
+}
+
+a.btn-custom-danger:focus,
+.btn-custom-danger:focus {
+    box-shadow: 0 0 0 0.2rem #AC010166;
+}

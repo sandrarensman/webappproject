@@ -1,107 +1,138 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.Data;
-using SchoolApp.Helpers;
+using SchoolApp.Interfaces.Helpers;
+using SchoolApp.Interfaces.Services;
 using SchoolApp.Models;
 
 namespace SchoolApp.Pages.Groups;
 
-public class EditModel(DefaultContext context) : StudentNamePageModel
+public class EditModel(
+    IStudentSelectionService studentSelectionService,
+    IGroupStudentFilterService groupStudentFilterService,
+    DefaultContext context,
+    IStudentValidator validator,
+    ILogger<CreateModel> logger) : PageModel
 {
-    [BindProperty]
-    public Group Group { get; set; } = null!;
-    
-    [BindProperty]
-    public List<int> SelectedStudentIds { get; set; } = [];
-    
-    [BindProperty]
-    public int? AvailableStudentId { get; set; }
+    [BindProperty] public Group Group { get; set; } = null!;
 
-    public List<Student> SelectedStudents { get; set; } = [];
+    [BindProperty] public List<int> AddedStudentIds { get; set; } = [];
+    [BindProperty] public List<int> CurrentStudentIds { get; set; } = [];
+
+    public List<Student> AddedStudents { get; set; } = [];
+    public List<Student> CurrentStudents { get; set; } = [];
     public List<Student> AvailableStudents { get; set; } = [];
 
-    public async Task<IActionResult> OnGetAsync(int? id)
-    {
-        if (id == null || context.Groups == null) return NotFound();
+    public SelectList StudentNameSelectList { get; set; }
 
+    public async Task<IActionResult> OnGetAsync(int id)
+    {
         var group = await context.Groups
             .Include(g => g.Students
                 .OrderBy(s => s.FirstName)
                 .ThenBy(s => s.LastName))
-            .FirstOrDefaultAsync(m => m.GroupId == id);
+            .FirstOrDefaultAsync(g => g.GroupId == id);
         if (group == null) return NotFound();
+
+        CurrentStudentIds = group.Students.Select(s => s.StudentId).ToList();
+        CurrentStudents = group.Students.ToList();
         
-        SelectedStudentIds = group.Students.Select(s => s.StudentId).ToList();
-        SelectedStudents = group.Students.ToList();
-        
-        AvailableStudents = await context.Students
-            .Where(s => !SelectedStudentIds.Contains(s.StudentId))
-            .OrderBy(s => s.FirstName)
-            .ThenBy(s => s.LastName)
-            .ToListAsync();
-        
-        PopulateStudentsDropDownList(context, selectedStudent: null);
-        
+        var filterResult = await groupStudentFilterService.FilterStudentsForGroupAsync(
+            AddedStudentIds, CurrentStudentIds, false);
+
+        AddedStudents = filterResult.AddedStudents;
+        AvailableStudents = filterResult.AvailableStudents;
+
+        StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync();
+
         Group = group;
         return Page();
     }
-    
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid) return Page();
 
+    public async Task<IActionResult> OnPostAsync(int id)
+    {
         var groupToUpdate = await context.Groups
             .Include(g => g.Students)
-            .FirstOrDefaultAsync(g => g.GroupId == Group.GroupId);
+            .FirstOrDefaultAsync(g => g.GroupId == id);
 
         if (groupToUpdate == null) return NotFound();
         
-        groupToUpdate.Day = Group.Day;
-        groupToUpdate.StartTime = Group.StartTime;
-        groupToUpdate.EndTime = Group.EndTime;
-        groupToUpdate.Level = Group.Level;
+        var filterResult = await groupStudentFilterService.FilterStudentsForGroupAsync(
+            AddedStudentIds, CurrentStudentIds, true);
         
-        if (AvailableStudentId.HasValue && !SelectedStudentIds.Contains(AvailableStudentId.Value))
+        if (!ModelState.IsValid)
         {
-            SelectedStudentIds.Add(AvailableStudentId.Value);
+            CurrentStudents = groupToUpdate.Students.ToList();
+            
+            AddedStudents = filterResult.AddedStudents;
+            AvailableStudents = filterResult.AvailableStudents;
+            StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync();
+
+            return Page();
         }
         
-        await UpdateGroupStudents(groupToUpdate);
-        
+        var allStudentIds = CurrentStudentIds.Union(AddedStudentIds).ToList();
+
         try
         {
-            await context.SaveChangesAsync();
+            var validStudents = await validator.ValidateStudentsAsync(allStudentIds);
+            groupToUpdate.Students = validStudents;
         }
-        catch (DbUpdateConcurrencyException)
+        catch (InvalidOperationException ex)
         {
-            if (! await GroupExists(Group.GroupId))
-            {
-                ModelState.AddModelError("", "The group has been removed by another user.");
-                return RedirectToPage("./Index");
-            }
+            ModelState.AddModelError("", ex.Message);
+            
+            CurrentStudents = groupToUpdate.Students.ToList();
+            
+            AddedStudents = filterResult.AddedStudents;
+            AvailableStudents = filterResult.AvailableStudents;
+            StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync();
+            return Page();
         }
 
-        return RedirectToPage("./Details", new { id = groupToUpdate.GroupId });
+        if (await TryUpdateModelAsync(
+                groupToUpdate,
+                "group",
+                g => g.Day,
+                g => g.Level,
+                g => g.StartTime,
+                g => g.EndTime))
+        {
+            try
+            {
+                await context.SaveChangesAsync();
+                return RedirectToPage("./Details", new { id = groupToUpdate.GroupId });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await GroupExists(groupToUpdate.GroupId))
+                {
+                    ModelState.AddModelError("", "The group has been removed by another user.");
+                    return RedirectToPage("./Index");
+                }
+
+                ModelState.AddModelError("", "A concurrency error occurred. Please try again.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("An unexpected error occurred: {Error}", ex.Message);
+                ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+            }
+        }
+        
+        CurrentStudents = groupToUpdate.Students.ToList();
+        
+        AddedStudents = filterResult.AddedStudents;
+        AvailableStudents = filterResult.AvailableStudents;
+        StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync();
+        return Page();
+        
     }
 
     private async Task<bool> GroupExists(int id)
     {
-        return await context.Groups.AnyAsync(e => e.GroupId == id);
+        return await context.Groups.AnyAsync(g => g.GroupId == id);
     }
-    
-    private async Task UpdateGroupStudents(Group groupToUpdate)
-    {
-        var validStudents = await context.Students
-            .Where(s => SelectedStudentIds.Contains(s.StudentId))
-            .ToListAsync();
-
-        if (validStudents.Count != SelectedStudentIds.Count)
-        {
-            ModelState.AddModelError("", "One or more selected students are invalid.");
-            return;
-        }
-        
-        groupToUpdate.Students = validStudents;
-    }
-
 }

@@ -1,0 +1,52 @@
+/* Forms */
+form {
+    background-color: var(--light-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea {
+    color: var(--dark-color);
+    background-color: var(--white-color);
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem #4ca2af2c;
+    outline: none;
+}
+
+/* Checkboxes */
+input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #ffffff;
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #4ca1af;
+    border-color: #4ca1af;
+}
+
+input[type="checkbox"]:checked::after {
+    content: "✔";
+    color: #000000;
+    font-size: 1.1rem;
+}

@@ -6,7 +6,9 @@ using SchoolApp.Models;
 
 namespace SchoolApp.Pages.Groups;
 
-public class DeleteModel(DefaultContext context) : PageModel
+public class DeleteModel(
+    DefaultContext context,
+    ILogger<CreateModel> logger) : PageModel
 {
     [BindProperty] public Group Group { get; set; }
 
@@ -24,16 +26,23 @@ public class DeleteModel(DefaultContext context) : PageModel
 
     public async Task<IActionResult> OnPostAsync(int? id)
     {
-        if (id == null || context.Groups == null) return NotFound();
         var group = await context.Groups.FindAsync(id);
-
-        if (group != null)
+        if (group == null) return NotFound();
+        
+        Group = group;
+        
+        try
         {
-            Group = group;
             context.Groups.Remove(Group);
             await context.SaveChangesAsync();
-        }
 
-        return RedirectToPage("./Index");
+            return RedirectToPage("./Index");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error deleting group: {Error}", ex.Message);
+            ModelState.AddModelError("", "An error occurred while deleting the record.");
+            return Page();
+        }
     }
 }

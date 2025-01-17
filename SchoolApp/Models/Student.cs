@@ -22,10 +22,12 @@ public class Student
 
     [Display(Name = "Phone number")]
     [MaxLength(20)]
+    [RegularExpression(@"^[\d\s]+$", ErrorMessage = "Invalid phone number")]
     public string PhoneNumber { get; init; }
 
     [Display(Name = "Email")]
     [MaxLength(100)]
+    [RegularExpression(@"^[^\s@]+@[^\s@]+\.[^\s@]+$", ErrorMessage = "Invalid email address")]
     public string EmailAddress { get; init; }
 
     [Display(Name = "Motivation")]

@@ -1,6 +1,6 @@
 [
   {
-    "Day": "Maandag",
+    "Day": "Monday",
     "StartTime": "18:00:00",
     "EndTime": "19:15:00",
     "Level": "Form",
@@ -17,7 +17,7 @@
     ]
   },
   {
-    "Day": "Maandag",
+    "Day": "Monday",
     "StartTime": "19:20:00",
     "EndTime": "20:45:00",
     "Level": "Beginners",
@@ -32,7 +32,7 @@
     ]
   },
   {
-    "Day": "Maandag",
+    "Day": "Monday",
     "StartTime": "20:45:00",
     "EndTime": "22:00:00",
     "Level": "YinYang",
@@ -49,7 +49,7 @@
     ]
   },
   {
-    "Day": "Woensdag",
+    "Day": "Wednesday",
     "StartTime": "18:00:00",
     "EndTime": "19:15:00",
     "Level": "Beginners",
@@ -65,7 +65,7 @@
     ]
   },
   {
-    "Day": "Woensdag",
+    "Day": "Wednesday",
     "StartTime": "19:30:00",
     "EndTime": "20:45:00",
     "Level": "SwordForm",
@@ -81,7 +81,7 @@
     ]
   },
   {
-    "Day": "Woensdag",
+    "Day": "Wednesday",
     "StartTime": "20:45:00",
     "EndTime": "22:00:00",
     "Level": "Form",

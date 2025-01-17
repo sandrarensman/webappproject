@@ -11,8 +11,31 @@ public class DefaultContext(DbContextOptions<DefaultContext> options) : DbContex
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
-        modelBuilder.Entity<Group>().ToTable("Group");
         modelBuilder.Entity<Student>().ToTable("Student");
+        modelBuilder.Entity<Enrollment>()
+            .ToTable("Enrollment")
+            .HasOne(e => e.Student)
+            .WithMany(s => s.Enrollments)
+            .HasForeignKey(e=>e.StudentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+        modelBuilder.Entity<Group>()
+            .ToTable("Group")
+            .HasMany(g => g.Students)
+            .WithMany(s => s.Groups)
+            .UsingEntity<Dictionary<string, object>>(
+                "GroupStudent",
+                j => j
+                    .HasOne<Student>()
+                    .WithMany()
+                    .HasForeignKey("StudentId")
+                    .OnDelete(DeleteBehavior.Cascade),
+                j => j
+                    .HasOne<Group>()
+                    .WithMany()
+                    .HasForeignKey("GroupId")
+                    .OnDelete(DeleteBehavior.Cascade)
+            );
     }
 }

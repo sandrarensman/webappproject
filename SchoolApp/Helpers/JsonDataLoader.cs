@@ -2,14 +2,8 @@ using System.Text.Json;
 
 namespace SchoolApp.Helpers;
 
-public class JsonDataLoader
+public class JsonDataLoader(JsonSerializerOptions jsonOptions)
 {
-    private readonly JsonSerializerOptions _jsonOptions;
-
-    public JsonDataLoader(JsonSerializerOptions jsonOptions)
-    {
-        _jsonOptions = jsonOptions;
-    }
     public List<T> LoadFromJson<T>(string filePath)
     {
         if (!File.Exists(filePath))
@@ -18,6 +12,6 @@ public class JsonDataLoader
         }
 
         var jsonData = File.ReadAllText(filePath);
-        return JsonSerializer.Deserialize<List<T>>(jsonData, _jsonOptions) ?? [];
+        return JsonSerializer.Deserialize<List<T>>(jsonData, jsonOptions) ?? [];
     }
 }

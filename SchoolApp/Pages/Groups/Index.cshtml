@@ -20,49 +20,25 @@
         <th>
             @Html.DisplayNameFor(model => model.Group[0].Level)
         </th>
+        <th class="text-end"></th>
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model.GroupData.Groups)
     {
-        var selectedRow = "";
-        if (item.GroupId == Model.GroupId)
-        {
-            selectedRow = "table-success";
-        }
-
-        <tr class="@selectedRow">
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Day)</a>
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Time)</a>
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.GroupId">@Html.DisplayFor(modelItem => item.Level)</a>
+        <tr class="clickable-row group-row" data-id="@item.GroupId">
+            <td>@Html.DisplayFor(modelItem => item.Day)</td>
+            <td>@Html.DisplayFor(modelItem => item.Time)</td>
+            <td>@Html.DisplayFor(modelItem => item.Level)</td>
+            <td class="text-end">
+                <a asp-page="./Details" asp-route-id="@item.GroupId" class="details-link" title="Details">&#128196;</a>
+                <a asp-page="./Edit" asp-route-id="@item.GroupId" class="edit-link" title="Edit">&#9998;</a>
             </td>
         </tr>
     }
     </tbody>
 </table>
 
-@if (Model.GroupData.Students != null)
-{
-    <h3>Students</h3>
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.GroupData.Students.ElementAt(0).FullName)
-            </th>
-        </tr>
-        @foreach (var item in Model.GroupData.Students)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FullName)
-                </td>
-            </tr>
-        }
-
-    </table>
-}
+<div id="students-container">
+    <p>Select a group to view its students.</p>
+</div>

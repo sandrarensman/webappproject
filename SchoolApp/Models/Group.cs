@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using SchoolApp.Helpers;
 
@@ -14,11 +15,22 @@ public enum Level
     [Display(Name = "Centre move")] CentreMove
 }
 
+public enum Day
+{
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday,
+    Saturday,
+    Sunday
+}
+
 public class Group
 {
     public Group() { }
     
-    public Group(string day, TimeSpan startTime, TimeSpan endTime, Level level, List<int> studentIds)
+    public Group(Day day, TimeSpan startTime, TimeSpan endTime, Level level, List<int> studentIds)
     {
         Day = day;
         StartTime = startTime;
@@ -30,22 +42,23 @@ public class Group
     public int GroupId { get; init; }
 
     [Display(Name = "Day")]
-    [MaxLength(20)]
-    public string Day { get; set; }
-
+    [JsonConverter(typeof(EnumConverter<Day>))]
+    [Required]
+    public Day Day { get; init; }
+    
     [Display(Name = "Level")]
     [JsonConverter(typeof(EnumConverter<Level>))]
-    public Level Level { get; set; }
+    public Level Level { get; init; }
 
     [Display(Name = "Start time")]
     [TimeSpanFormat]
     [DataType(DataType.Time)]
-    public TimeSpan StartTime { get; set; }
+    public TimeSpan StartTime { get; init; }
 
     [Display(Name = "End time")]
     [TimeSpanFormat]
     [DataType(DataType.Time)]
-    public TimeSpan EndTime { get; set; }
+    public TimeSpan EndTime { get; init; }
 
     [Display(Name = "Time")] 
     public string Time => StartTime.ToString(@"hh\:mm") + " - " + EndTime.ToString(@"hh\:mm");
@@ -53,7 +66,9 @@ public class Group
     [Display(Name = "Group")]
     public string Name => Day + " " + Time;
 
-    public ICollection<Student> Students { get; set; }
+    [JsonIgnore]
+    public ICollection<Student> Students { get; set; } = new List<Student>();
     
-    public List<int> StudentIds { get; init; }
+    [NotMapped]
+    public List<int> StudentIds { get; init; } = [];
 }

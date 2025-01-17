@@ -1,0 +1,25 @@
+@model SchoolApp.ViewModels.GroupStudentsViewModel
+
+@if (Model.Students != null && Model.Students.Any())
+{
+    <h4>@Model.GroupName</h4>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Full Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var student in Model.Students)
+        {
+            <tr>
+                <td>@student.FullName</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No students found for this group.</p>
+}

@@ -1,9 +1,9 @@
-using System.ComponentModel;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.Data;
 using SchoolApp.Helpers;
+using SchoolApp.Interfaces.Helpers;
 using SchoolApp.Interfaces.Services;
 using SchoolApp.Models;
 using SchoolApp.Services;
@@ -15,10 +15,10 @@ var options = new JsonSerializerOptions
     Converters =
     {
         new EnumConverter<Level>(),
+        new EnumConverter<Day>(),
         new EnumConverter<EnrollmentType>()
     }
 };
-
 
 var environment = builder.Environment.EnvironmentName;
 builder.Configuration.AddEnvironmentVariables().AddJsonFile($"appsettings.{environment}.json");
@@ -37,6 +37,11 @@ builder.Services.AddScoped<EnrollmentService>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+builder.Services.AddScoped<IStudentValidator, StudentValidator>();
+builder.Services.AddScoped<IStudentParticipationService, StudentParticipationService>();
+builder.Services.AddScoped<IStudentSelectionService, StudentSelectionService>();
+builder.Services.AddScoped<IGroupStudentFilterService, GroupStudentFilterService>();
+
 builder.Services.AddSingleton(options);
 builder.Services.AddSingleton<JsonDataLoader>();
 builder.Services.AddSingleton<DbInitializer>();

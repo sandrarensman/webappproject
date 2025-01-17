@@ -14,7 +14,7 @@
         <p>
             Name:
             <input type="text" name="SearchString" value="@Model.CurrentFilter"/>
-            <input type="submit" value="Search" class="btn btn-primary"/>
+            <input type="submit" value="Search" class="btn btn-custom"/>
             <a asp-page="./Index" class="btn btn-custom">Show all</a>
         </p>
     </div>
@@ -28,6 +28,15 @@
                asp-route-sortOrder="@Model.StudentSort"
                asp-route-currentFilter="@Model.CurrentFilter">
                 @Html.DisplayNameFor(model => model.Enrollments.Items.FirstOrDefault().Student.FullName)
+                @switch (Model.CurrentSort)
+                {
+                    case "student_desc":
+                        @:<span>&#11014;</span> <!-- (↑) -->
+                        break;
+                    case "student" or "default":
+                        @:<span>&#11015;</span> <!-- (↓) -->
+                        break;
+                }
             </a>
         </th>
         <th class="@(Model.CurrentSort == "date" || Model.CurrentSort == "date_desc" ? "sorted" : "")">
@@ -35,6 +44,15 @@
                asp-route-sortOrder="@Model.DateSort"
                asp-route-currentFilter="@Model.CurrentFilter">
                 @Html.DisplayNameFor(model => model.Enrollments.Items.FirstOrDefault().StartDate)
+                @switch (Model.CurrentSort)
+                {
+                    case "date_desc":
+                        @:<span>&#11014;</span> <!-- (↑) -->
+                        break;
+                    case "date":
+                        @:<span>&#11015;</span> <!-- (↓) -->
+                        break;
+                }
             </a>
         </th>
         <th>
@@ -53,24 +71,12 @@
     <tbody>
     @foreach (var item in Model.Enrollments.Items)
     {
-        <tr>
-            <td>
-                <a asp-page="./Details"
-                   asp-route-id="@item.EnrollmentId">@Html.DisplayFor(modelItem => item.Student.FullName)</a>
-            </td>
-            <td>
-                <a asp-page="./Details"
-                   asp-route-id="@item.EnrollmentId">@Html.DisplayFor(modelItem => item.StartDate)</a>
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.EnrollmentId">
-                    @(item.EndDate == DateTime.MinValue ? "" : Html.DisplayFor(modelItem => item.EndDate))</a>
-            </td>
-            <td>
-                <a asp-page="./Details"
-                   asp-route-id="@item.EnrollmentId">@Html.DisplayFor(modelItem => item.EnrollmentType)</a>
-            </td>
-            <td style="text-align: right;">
+        <tr class="clickable-row enrollment-row" data-href="@Url.Page("./Details", new { id = item.EnrollmentId })">
+            <td>@Html.DisplayFor(modelItem => item.Student.FullName)</td>
+            <td>@Html.DisplayFor(modelItem => item.StartDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.EndDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.EnrollmentType)</td>
+            <td class="text-end">
                 <a asp-page="./Delete" asp-route-id="@item.EnrollmentId" class="delete-link" title="Delete">✖</a>
             </td>
         </tr>

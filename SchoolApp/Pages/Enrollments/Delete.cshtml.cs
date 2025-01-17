@@ -6,17 +6,17 @@ using SchoolApp.Models;
 
 namespace SchoolApp.Pages.Enrollments;
 
-public class DeleteModel(DefaultContext context) : PageModel
+public class DeleteModel(
+    DefaultContext context,
+    ILogger<CreateModel> logger) : PageModel
 {
-    private readonly DefaultContext _context = context;
-
-    [BindProperty] public Enrollment Enrollment { get; set; } = default!;
+    [BindProperty] public Enrollment Enrollment { get; set; } = null!;
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
         if (id == null) return NotFound();
 
-        var enrollment = await _context.Enrollments
+        var enrollment = await context.Enrollments
             .Include(e => e.Student)
             .AsNoTracking()
             .FirstOrDefaultAsync(m => m.EnrollmentId == id);
@@ -29,16 +29,23 @@ public class DeleteModel(DefaultContext context) : PageModel
 
     public async Task<IActionResult> OnPostAsync(int? id)
     {
-        if (id == null) return NotFound();
+        var enrollment = await context.Enrollments.FindAsync(id);
+        if (enrollment == null) return NotFound();
 
-        var enrollment = await _context.Enrollments.FindAsync(id);
-        if (enrollment != null)
+        Enrollment = enrollment;
+
+        try
         {
-            Enrollment = enrollment;
-            _context.Enrollments.Remove(Enrollment);
-            await _context.SaveChangesAsync();
-        }
+            context.Enrollments.Remove(Enrollment);
+            await context.SaveChangesAsync();
 
-        return RedirectToPage("./Index");
+            return RedirectToPage("./Index");
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("Error deleting enrollment: {Error}", ex.Message);
+            ModelState.AddModelError("", "An error occurred while deleting the record.");
+            return Page();
+        }
     }
 }

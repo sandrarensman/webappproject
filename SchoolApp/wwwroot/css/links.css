@@ -1,0 +1,30 @@
+/* Links */
+a {
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+a.delete-link {
+    color: #ced4da;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+a.delete-link:hover {
+    transform: scale(1.2);
+    color: darkred;
+}
+
+a.edit-link {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+a.edit-link:hover {
+    transform: scale(1.2);
+    color: var(--secondary-color);
+}

@@ -1,5 +1,6 @@
 @page
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SchoolApp.Models
 @model CreateModel
 
 @{
@@ -8,31 +9,98 @@
 
 <h1>New Group</h1>
 <hr/>
+<div class="container">
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
+        <input type="hidden" id="HiddenAddedStudentIds" name="AddedStudentIds"
+               value="@string.Join(",", Model.AddedStudentIds)"/>
         <form method="post">
+            @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="table table-borderless">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Group.Day" class="control-label"></label>
+                                <select asp-for="Group.Day" class="form-control"
+                                        asp-items="Html.GetEnumSelectList<Day>()">
+                                    <option value="">-- Select Weekday --</option>
+                                </select>
+                                <span asp-validation-for="Group.Day" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Group.Level" class="control-label"></label>
+                                <select asp-for="Group.Level" class="form-control"
+                                        asp-items="Html.GetEnumSelectList<Level>()">
+                                    <option value="">-- Select Level --</option>
+                                </select>
+                                <span asp-validation-for="Group.Level" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Group.StartTime" class="control-label"></label>
+                                <input asp-for="Group.StartTime" class="form-control"/>
+                                <span asp-validation-for="Group.StartTime" class="text-danger"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label asp-for="Group.EndTime" class="control-label"></label>
+                                <input asp-for="Group.EndTime" class="form-control"/>
+                                <span asp-validation-for="Group.EndTime" class="text-danger"></span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label asp-for="AvailableStudents">Add Student</label>
+                                    <select asp-for="AvailableStudentId" asp-items="Model.StudentNameSelectList"
+                                            class="form-control available-student-dropdown">
+                                        <option value="">-- Select Student --</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br/>
             <div class="form-group">
-                <label asp-for="Group.Day" class="control-label"></label>
-                <input asp-for="Group.Day" class="form-control"/>
-                <span asp-validation-for="Group.Day" class="text-danger"></span>
+                <div id="addedStudentsHeader">
+                </div>
+                <div id="StudentsToAdd" class="table table-borderless">
+                    <table>
+                        <tbody id="addedStudentsList">
+                        @foreach (var student in Model.AddedStudents)
+                        {
+                            <tr data-student-id="@student.StudentId">
+                                <td>
+                                    <input type="checkbox" name="AddedStudentIds" value="@student.StudentId" checked />
+                                    @student.FullName
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="Group.StartTime" class="control-label"></label>
-                <input asp-for="Group.StartTime" class="form-control"/>
-                <span asp-validation-for="Group.StartTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Group.EndTime" class="control-label"></label>
-                <input asp-for="Group.EndTime" class="form-control"/>
-                <span asp-validation-for="Group.EndTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-                <a asp-page="Index" class="btn btn-cancel">Cancel</a>
+                <input type="submit" value="Create" class="btn btn-custom"/>
+                <a asp-page="Index" class="btn btn-custom-cancel">Cancel</a>
             </div>
         </form>
     </div>
+</div>
 </div>
 
 @section Scripts {

@@ -1,8 +1,8 @@
 using SchoolApp.Models;
 
-namespace SchoolApp.ViewModels;
+namespace SchoolApp.DTOs;
 
-public class GroupIndexData
+public class GroupMembershipDto
 {
     public IEnumerable<Group> Groups { get; init; }
     public IEnumerable<Student> Students { get; set; }

@@ -1,0 +1,36 @@
+/* Navigation Bar */
+.navbar-brand {
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    white-space: normal;
+    text-align: center;
+    word-break: break-word;
+}
+
+.navbar-brand:hover {
+    color: #000000;
+}
+
+.navbar .nav-link:hover {
+    background-color: var(--light-color) !important;
+    border-radius: 4px;
+}
+
+.navbar .dropdown-menu .dropdown-item:active {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+
+.navbar .nav-link.dropdown-toggle {
+    color: #212529 !important;
+}
+
+.navbar .nav-link.dropdown-toggle:hover,
+.navbar .nav-link.dropdown-toggle:focus,
+.navbar .nav-link.dropdown-toggle:visited {
+    color: #212529 !important;
+}
+
+.navbar .nav-item.space-item {
+    margin-left: 20px;
+}

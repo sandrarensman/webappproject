@@ -1,65 +1,66 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolApp.Data;
-using SchoolApp.Helpers;
+using SchoolApp.DTOs;
+using SchoolApp.Interfaces.Services;
 using SchoolApp.Models;
 
 namespace SchoolApp.Pages.Students;
 
-public class CreateModel(DefaultContext context, ILogger<StudentGroupsPageModel> logger) : StudentGroupsPageModel
+public class CreateModel(
+    DefaultContext context,
+    IStudentParticipationService participationService,
+    ILogger<CreateModel> logger) : PageModel
 {
-    [BindProperty] public Student Student { get; set; }
+    [BindProperty]
+    public Student Student { get; set; } = new()
+    {
+        Groups = new List<Group>()
+    };
+
+    public List<StudentParticipationDto> GroupParticipationData { get; set; } = [];
 
     public IActionResult OnGet()
     {
-        var student = new Student
-        {
-            Groups = []
-        };
-
-        PopulateGroupParticipationData(context, student);
+        GroupParticipationData = participationService.GetGroupParticipationData(Student);
         return Page();
     }
 
-
     public async Task<IActionResult> OnPostAsync(string[] selectedGroups)
     {
-        var emptyStudent = new Student();
+        selectedGroups ??= [];
 
-        if (selectedGroups.Length > 0)
-        {
-            emptyStudent.Groups = [];
-            await context.Groups.LoadAsync();
-        }
+        var newStudent = new Student();
 
-        foreach (var group in selectedGroups)
-        {
-            var foundGroup = await context.Groups.FindAsync(int.Parse(group));
-            if (foundGroup != null)
-                emptyStudent.Groups.Add(foundGroup);
-            else
-                logger.LogWarning("Group {group} not found", group);
-        }
+        participationService.UpdateStudentGroups(selectedGroups, newStudent);
 
         try
         {
             if (await TryUpdateModelAsync(
-                    emptyStudent,
+                    newStudent,
                     "student",
                     s => s.FirstName, s => s.Prefix, s => s.LastName,
                     s => s.PhoneNumber, s => s.EmailAddress, s => s.Motivation))
             {
-                context.Students.Add(emptyStudent);
-                await context.SaveChangesAsync();
-                return RedirectToPage("./Index");
+                try
+                {
+                    context.Students.Add(newStudent);
+                    await context.SaveChangesAsync();
+                    return RedirectToPage("./Details", new { id = newStudent.StudentId });
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError("An unexpected error occurred: {Error}", ex.Message);
+                    ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+                }
             }
         }
         catch (Exception ex)
         {
-            logger.LogError(ex.Message);
+            logger.LogError("Error creating student: {Error}", ex.Message);
         }
 
-        PopulateGroupParticipationData(context, emptyStudent);
+        GroupParticipationData = participationService.GetGroupParticipationData(newStudent);
         return Page();
     }
 }

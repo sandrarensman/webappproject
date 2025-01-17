@@ -7,8 +7,6 @@ namespace SchoolApp.Pages.Students;
 
 public class IndexModel(IStudentService studentService) : PageModel
 {
-    private readonly IStudentService _studentService = studentService;
-
     public string FirstNameSort { get; set; }
     public string LastNameSort { get; set; }
 
@@ -35,9 +33,9 @@ public class IndexModel(IStudentService studentService) : PageModel
 
         CurrentFilter = searchString;
 
-        PageSize = _studentService.GetPageSize(pageSize);
-        Students = await _studentService.GetPaginatedStudentsAsync(sortOrder, searchString, pageIndex ?? 1, PageSize);
+        PageSize = studentService.GetPageSize(pageSize);
+        Students = await studentService.GetPaginatedStudentsAsync(sortOrder, searchString, pageIndex ?? 1, PageSize);
 
-        PageSizeDropdownHtml = _studentService.GeneratePageSizeDropdownHtml(PageSize);
+        PageSizeDropdownHtml = studentService.GeneratePageSizeDropdownHtml(PageSize);
     }
 }

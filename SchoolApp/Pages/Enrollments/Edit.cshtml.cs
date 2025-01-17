@@ -1,50 +1,83 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SchoolApp.Data;
-using SchoolApp.Helpers;
+using SchoolApp.Interfaces.Services;
 using SchoolApp.Models;
 
 namespace SchoolApp.Pages.Enrollments;
 
-public class EditModel(DefaultContext context) : StudentNamePageModel
+public class EditModel(
+    IStudentSelectionService studentSelectionService,
+    DefaultContext context,
+    ILogger<CreateModel> logger) : PageModel
 {
-    private readonly DefaultContext _context = context;
+    [BindProperty] public Enrollment Enrollment { get; set; } = null!;
 
-    [BindProperty] public Enrollment Enrollment { get; set; } = default!;
+    public SelectList StudentNameSelectList { get; set; }
 
-    public async Task<IActionResult> OnGetAsync(int? id)
+    public async Task<IActionResult> OnGetAsync(int id)
     {
-        if (id == null) return NotFound();
-
-        var enrollment = await _context.Enrollments
+        var enrollment = await context.Enrollments
             .Include(e => e.Student)
             .FirstOrDefaultAsync(e => e.EnrollmentId == id);
 
         if (enrollment == null) return NotFound();
         Enrollment = enrollment;
 
-        PopulateStudentsDropDownList(_context, Enrollment.StudentId);
+        StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync(id);
+        
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync(int? id)
+    public async Task<IActionResult> OnPostAsync(int id)
     {
-        if (id == null) return NotFound();
-
-        var enrollmentToUpdate = await _context.Enrollments.FindAsync(id);
-
+        var enrollmentToUpdate = await context.Enrollments.FindAsync(id);
         if (enrollmentToUpdate == null) return NotFound();
+        
+        if (!ModelState.IsValid)
+        {
+            StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync(enrollmentToUpdate.StudentId);
+            return Page();
+        }
 
         if (await TryUpdateModelAsync(
                 enrollmentToUpdate,
-                "course",
-                e => e.EnrollmentType, e => e.StartDate, e => e.EndDate, e => e.StudentId))
+                "enrollment",
+                e => e.EnrollmentType,
+                e => e.StartDate,
+                e => e.EndDate, 
+                e => e.StudentId))
         {
-            await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
+            try
+            {
+                await context.SaveChangesAsync();
+                return RedirectToPage("./Details", new { id = enrollmentToUpdate.EnrollmentId });
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!await EnrollmentExists(enrollmentToUpdate.EnrollmentId))
+                {
+                    ModelState.AddModelError("", "The enrollment has been removed by another user.");
+                    return RedirectToPage("./Index");
+                }
+
+                ModelState.AddModelError("", "A concurrency error occurred. Please try again.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("An unexpected error occurred: {Error}", ex.Message);
+                ModelState.AddModelError("", "An unexpected error occurred. Please try again later.");
+            }
         }
 
-        PopulateStudentsDropDownList(_context, enrollmentToUpdate.StudentId);
+        StudentNameSelectList = await studentSelectionService.GetStudentDropdownListAsync(enrollmentToUpdate.StudentId);
         return Page();
+    }
+    
+    private async Task<bool> EnrollmentExists(int id)
+    {
+        return await context.Enrollments.AnyAsync(e => e.EnrollmentId == id);
     }
 }

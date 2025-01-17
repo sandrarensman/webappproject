@@ -1,6 +1,6 @@
-﻿namespace SchoolApp.ViewModels;
+﻿namespace SchoolApp.DTOs;
 
-public class GroupParticipationData
+public class StudentParticipationDto
 {
     public int GroupId { get; init; }
     public string Name { get; init; }

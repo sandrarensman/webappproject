@@ -23,7 +23,6 @@ public class DbInitializer(JsonDataLoader jsonDataLoader)
         {
             context.Groups.Add(groupFromDb);
         }
-        
         context.SaveChanges();
     }
 }

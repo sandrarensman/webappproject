@@ -1,13 +1,14 @@
 @page
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IConfiguration Configuration
 @model IndexModel
 @{
     ViewData["Title"] = "Welcome to SchoolApp";
 }
 
 <div class="text-center mt-5">
-    <h1>Welcome to SchoolApp</h1>
-    <p class="lead">Manage students, groups, and enrollments with ease.</p>
+    <h1>Welcome to @Configuration.GetSection("SiteData")["Name"]</h1>
+    <p class="lead">Manage a fictional Tai Chi school.</p>
 </div>
 
 <hr/>
@@ -15,17 +16,17 @@
 <div class="row text-center">
     <div class="col-md-4">
         <h2>Students</h2>
-        <p>View and manage the student database.</p>
+        <p>View and manage students.</p>
         <a asp-page="/Students/Index" class="btn btn-custom">Go to Students</a>
     </div>
     <div class="col-md-4">
         <h2>Groups</h2>
-        <p>Organize students into groups.</p>
+        <p>Manage groups and timetables.</p>
         <a asp-page="/Groups/Index" class="btn btn-custom">Go to Groups</a>
     </div>
     <div class="col-md-4">
         <h2>Enrollments</h2>
-        <p>Manage enrollment records and schedules.</p>
+        <p>Manage student enrollments.</p>
         <a asp-page="/Enrollments/Index" class="btn btn-custom">Go to Enrollments</a>
     </div>
 </div>

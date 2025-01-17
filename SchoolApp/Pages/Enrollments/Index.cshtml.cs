@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using SchoolApp.Helpers;
 using SchoolApp.Models;
 using SchoolApp.Services;
@@ -7,8 +8,6 @@ namespace SchoolApp.Pages.Enrollments;
 
 public class IndexModel(EnrollmentService enrollmentService) : PageModel
 {
-    private readonly EnrollmentService _enrollmentService = enrollmentService;
-
     public string StudentSort { get; set; }
     public string DateSort { get; set; }
     public string TypeSort { get; set; }
@@ -21,7 +20,7 @@ public class IndexModel(EnrollmentService enrollmentService) : PageModel
 
     public PaginatedListHelper<Enrollment> Enrollments { get; set; }
 
-    public async Task OnGetAsync(string sortOrder, string currentFilter,
+    public async Task<IActionResult> OnGetAsync(string sortOrder, string currentFilter,
         string searchString, int pageSize, int? pageIndex)
     {
         CurrentSort = sortOrder ?? "default";
@@ -37,10 +36,12 @@ public class IndexModel(EnrollmentService enrollmentService) : PageModel
 
         CurrentFilter = searchString;
 
-        PageSize = _enrollmentService.GetPageSize(pageSize);
+        PageSize = enrollmentService.GetPageSize(pageSize);
         Enrollments =
-            await _enrollmentService.GetPaginatedEnrollmentsAsync(sortOrder, searchString, pageIndex ?? 1, PageSize);
+            await enrollmentService.GetPaginatedEnrollmentsAsync(sortOrder, searchString, pageIndex ?? 1, PageSize);
 
-        PageSizeDropdownHtml = _enrollmentService.GeneratePageSizeDropdownHtml(PageSize);
+        PageSizeDropdownHtml = enrollmentService.GeneratePageSizeDropdownHtml(PageSize);
+        
+        return Page();
     }
 }

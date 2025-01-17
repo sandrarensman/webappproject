@@ -1,5 +1,6 @@
 @page "{id:int}"
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using SchoolApp.Models
 @model EditModel
 
 @{
@@ -13,8 +14,10 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <input type="hidden" id="HiddenSelectedStudentIds" name="SelectedStudentIds"
-                   value="@string.Join(",", Model.SelectedStudentIds)"/>
+            <input type="hidden" id="HiddenAddedStudentIds" name="AddedStudentIds"
+                   value="@string.Join(",", Model.AddedStudentIds)"/>
+            <input type="hidden" id="HiddenCurrentStudentIds" name="CurrentStudentIds"
+                   value="@string.Join(",", Model.CurrentStudentIds)"/>
             <form method="post">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -26,14 +29,19 @@
                             <td>
                                 <div class="form-group">
                                     <label asp-for="Group.Day" class="control-label"></label>
-                                    <input asp-for="Group.Day" class="form-control"/>
-                                    <span asp-validation-for="Group.Day" class="text-danger"></span>
+                                    <select asp-for="Group.Day" class="form-control"
+                                            asp-items="Html.GetEnumSelectList<Day>()">
+                                        <option value="">-- Select Weekday --</option>
+                                    </select>
                                 </div>
                             </td>
                             <td>
                                 <div class="form-group">
                                     <label asp-for="Group.Level" class="control-label"></label>
-                                    <input asp-for="Group.Level" class="form-control"/>
+                                    <select asp-for="Group.Level" class="form-control"
+                                            asp-items="Html.GetEnumSelectList<Level>()">
+                                        <option value="">-- Select Level --</option>
+                                    </select>
                                     <span asp-validation-for="Group.Level" class="text-danger"></span>
                                 </div>
                             </td>
@@ -59,8 +67,7 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label asp-for="AvailableStudents">Add Student</label>
-                                        <select asp-for="AvailableStudentId" asp-items="Model.StudentNameSelectList"
-                                                class="form-control available-student-dropdown">
+                                        <select class="form-control available-student-dropdown" asp-items="Model.StudentNameSelectList">
                                             <option value="">-- Select Student --</option>
                                         </select>
                                     </div>
@@ -70,13 +77,22 @@
                         </tbody>
                     </table>
                 </div>
-
+                <br/>
                 <div class="form-group">
-                    <br/>
-                    <h5>Students to Add</h5>
+                    <div id="addedStudentsHeader">
+                    </div>
                     <div id="StudentsToAdd" class="table table-borderless">
                         <table>
                             <tbody id="addedStudentsList">
+                            @foreach (var student in Model.AddedStudents)
+                            {
+                                <tr data-student-id="@student.StudentId">
+                                    <td>
+                                        <input type="checkbox" name="AddedStudentIds" value="@student.StudentId" checked />
+                                        @student.FullName
+                                    </td>
+                                </tr>
+                            }
                             </tbody>
                         </table>
                     </div>
@@ -87,14 +103,14 @@
                     <h5>Current Students</h5>
                     <div id="CurrentStudents" class="table table-borderless">
                         <div class="row">
-                            @foreach (var student in Model.SelectedStudents)
+                            @foreach (var student in Model.CurrentStudents)
                             {
                                 <div class="col-md-6">
                                     <table>
                                         <tbody id="studentListBody">
                                         <tr>
                                             <td>
-                                                <input type="checkbox" name="SelectedStudentIds" value="@student.StudentId" checked/>
+                                                <input type="checkbox" name="CurrentStudentIds" value="@student.StudentId" checked />
                                                 @student.FullName
                                             </td>
                                         </tr>
@@ -107,8 +123,8 @@
                 </div>
                 <br/>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary"/>
-                    <a asp-page="./Details" asp-route-id="@Model.Group.GroupId" class="btn btn-cancel">Cancel</a>
+                    <input type="submit" value="Save" class="btn btn-custom"/>
+                    <a asp-page="./Details" asp-route-id="@Model.Group.GroupId" class="btn btn-custom-cancel">Cancel</a>
                 </div>
             </form>
         </div>

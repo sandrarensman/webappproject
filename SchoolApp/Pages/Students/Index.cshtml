@@ -13,7 +13,7 @@
         <p>
             Name:
             <input type="text" name="SearchString" value="@Model.CurrentFilter"/>
-            <input type="submit" value="Search" class="btn btn-primary"/>
+            <input type="submit" value="Search" class="btn btn-custom"/>
             <a asp-page="./Index" class="btn btn-custom">Show all</a>
         </p>
     </div>
@@ -27,6 +27,15 @@
                asp-route-sortOrder="@Model.FirstNameSort"
                asp-route-currentFilter="@Model.CurrentFilter">
                 @Html.DisplayNameFor(model => model.Students.Items[0].FirstName)
+                @switch (Model.CurrentSort)
+                {
+                    case "first_name_desc":
+                        @:<span>&#11014;</span> <!-- (↑) -->
+                        break;
+                    case "first_name" or "default":
+                        @:<span>&#11015;</span> <!-- (↓) -->
+                        break;
+                }
             </a>
         </th>
         <th>
@@ -37,6 +46,15 @@
                asp-route-sortOrder="@Model.LastNameSort"
                asp-route-currentFilter="@Model.CurrentFilter">
                 @Html.DisplayNameFor(model => model.Students.Items[0].LastName)
+                @switch (Model.CurrentSort)
+                {
+                    case "last_name_desc":
+                        @:<span>&#11014;</span> <!-- (↑) -->
+                        break;
+                    case "last_name":
+                        @:<span>&#11015;</span> <!-- (↓) -->
+                        break;
+                }
             </a>
         <th>
             @Html.DisplayNameFor(model => model.Students.Items[0].PhoneNumber)
@@ -52,25 +70,13 @@
     <tbody>
     @foreach (var item in Model.Students.Items)
     {
-        <tr>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.FirstName)</a>
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.Prefix)</a>
-            </td>
-            <td>
-                <a asp-page="./Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.LastName)</a>
-            </td>
-            <td>
-                <a asp-page="./Details"
-                   asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.PhoneNumber)</a>
-            </td>
-            <td>
-                <a asp-page="./Details"
-                   asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.EmailAddress)</a>
-            </td>
-            <td style="text-align: right;">
+        <tr class="clickable-row student-row" data-href="@Url.Page("./Details", new { id = item.StudentId })">
+            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => item.Prefix)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.EmailAddress)</td>
+            <td class="text-end">
                 <a asp-page="./Delete" asp-route-id="@item.StudentId" class="delete-link" title="Delete">✖</a>
             </td>
         </tr>
