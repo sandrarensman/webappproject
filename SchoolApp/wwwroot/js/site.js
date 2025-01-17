@@ -68,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const groupId = row.getAttribute("data-id");
             if (groupId) {
                 e.preventDefault();
+                window.scrollTo(0, 0);
 
                 // Get group members
                 fetch(`/Groups?handler=GroupStudents&id=${groupId}`)
